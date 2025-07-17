@@ -1,18 +1,17 @@
 import { useState, createContext } from "react";
-import Register from "./components/Register";
+import Register from "./pages/Register";
 import Product from "./components/Product";
-import Cart from "./components/Cart";
+import Cart from "./pages/Cart";
 import Order from "./components/Order";
-import Admin from "./components/Admin";
+import Admin from "./pages/Admin";
 import Users from "./components/Users";
-import Orders from "./components/Orders";
+import Orders from "./pages/Orders";
 import Header from "./components/Header";
-import Profile from "./components/Profile";
-import Footer from "./components/Footer";
-import Login from "./components/Login";
-import Products from "./components/Products";
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
+import Login from "./pages/Login";
+import Products from "./pages/Products";
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
-import "./App.css";
 export const AppContext = createContext();
 function App() {
   const [cart, setCart] = useState([]);
@@ -23,7 +22,8 @@ function App() {
         <BrowserRouter>
           <Header />
           <Routes>
-            <Route index element={<Product />} />
+            <Route index element={<Home />} />
+            <Route path="products" element={<Product />} />
             <Route path="login" element={<Login />} />
              <Route path="profile" element={<Profile />} />
             <Route path="register" element={<Register />} />
@@ -35,7 +35,6 @@ function App() {
               <Route path="orders" element={<Orders />} />
             </Route>
           </Routes>
-          <Footer />
         </BrowserRouter>
       </AppContext.Provider>
     </div>

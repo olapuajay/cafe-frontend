@@ -1,3 +1,5 @@
-* {
-    margin: 0px
+@import "tailwindcss";
+
+body {
+  background-color: #121212;
 }
