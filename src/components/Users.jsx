@@ -8,6 +8,7 @@ export default function Users() {
   const [users, setUsers] = useState([]);
   const { user } = useContext(AppContext);
   const [error, setError] = useState();
+  const [loading, setLoading] = useState(true);
   const frmRef = useRef();
   const [form, setForm] = useState({
     firstName: "",
@@ -24,7 +25,6 @@ export default function Users() {
   const API_URL = import.meta.env.VITE_API_URL;
   const fetchUsers = async () => {
     try {
-      setError("Loading...");
       const url = `${API_URL}/api/users/?page=${page}&limit=${limit}&search=${searchVal}`;
       const result = await axios.get(url, {
         headers: {
@@ -37,6 +37,8 @@ export default function Users() {
     } catch (err) {
       console.log(err);
       setError("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -137,17 +139,18 @@ export default function Users() {
     });
   };
   return (
-    <div>
-      <h2>User Management</h2>
+    <div className="flex flex-col md:p-6 p-2 text-white">
+      <h2 className="text-[#D7CCC8] font-bold text-2xl">User Management</h2>
       {error}
-      <div>
-        <form ref={frmRef}>
+      <div className="p-2 flex md:flex-row flex-col gap-8 rounded-lg shadow-lg">
+        <form ref={frmRef} className="space-y-4 flex flex-col bg-[#3E2723] p-4 md:w-1/2 md:mx-auto rounded-lg shadow-lg">
           <input
             name="firstName"
             value={form.firstName}
             type="text"
             placeholder="First Name"
             onChange={handleChange}
+            className="bg-[#1E1E1E] text-[#D7CCC8] p-2 rounded-md focus:outline-none focus:bg-[#2C2C2C]"
             required
           />
           <input
@@ -156,6 +159,7 @@ export default function Users() {
             type="text"
             placeholder="Last Name"
             onChange={handleChange}
+            className="bg-[#1E1E1E] text-[#D7CCC8] p-2 rounded-md focus:outline-none focus:bg-[#2C2C2C]"
             required
           />
           <input
@@ -164,6 +168,7 @@ export default function Users() {
             type="text"
             placeholder="Email Address"
             onChange={handleChange}
+            className="bg-[#1E1E1E] text-[#D7CCC8] p-2 rounded-md focus:outline-none focus:bg-[#2C2C2C]"
             required
           />
           <input
@@ -172,6 +177,7 @@ export default function Users() {
             type="password"
             placeholder="New Password"
             onChange={handleChange}
+            className="bg-[#1E1E1E] text-[#D7CCC8] p-2 rounded-md focus:outline-none focus:bg-[#2C2C2C]"
             required
           />
           <select
@@ -179,6 +185,7 @@ export default function Users() {
             value={form.role}
             required
             onChange={handleChange}
+            className="bg-[#1E1E1E] text-[#D7CCC8] p-2 rounded-md focus:outline-none focus:bg-[#2C2C2C]"
           >
             <option value="">--Select Role--</option>
             <option value="user">User</option>
@@ -191,60 +198,65 @@ export default function Users() {
             onChange={handleChange}
             placeholder="Role"
           /> */}
-
           {editId ? (
             <>
-              <button onClick={handleUpdate}>Update</button>
-              <button onClick={handleCancel}>Cancel</button>
+              <button onClick={handleUpdate} className="w-full bg-[#FFB74D] py-2 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">Update</button>
+              <button onClick={handleCancel} className="w-full bg-[#FFB74D] py-2 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">Cancel</button>
             </>
           ) : (
-            <button onClick={handleAdd}>Add</button>
+            <button onClick={handleAdd} className="w-full bg-[#FFB74D] py-2 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">ADD</button>
           )}
         </form>
-      </div>
-      <div>
-        <input type="text" onChange={(e) => setSearchVal(e.target.value)} />
-        <button onClick={() => fetchUsers()}>Search</button>
-      </div>
-      <div>
-        <table border="1">
-          <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email Address</th>
-              <th>Role</th>
-            </tr>
-          </thead>
-          {users.map((value) => (
-            <tbody key={value._id}>
-              <tr>
-                <td>{value.firstName}</td>
-                <td>{value.lastName}</td>
-                <td>{value.email}</td>
-                <td>{value.role}</td>
-                <td>
-                  <button onClick={() => handleEdit(value)}>Edit</button>
-                  <button onClick={() => handleDelete(value._id)}>
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          ))}
-        </table>
-      </div>
-      <div>
-        <button disabled={page === 1} onClick={() => setPage(page - 1)}>
-          Previous
-        </button>
-        Page {page} of {totalPages}
-        <button
-          disabled={page === totalPages}
-          onClick={() => setPage(page + 1)}
-        >
-          Next
-        </button>
+        <div className="flex flex-col md:w-1/2 mx-auto">
+          <div className="flex gap-2 items-center mb-4 w-full">
+            <input type="text" onChange={(e) => setSearchVal(e.target.value)} className="bg-[#1E1E1E] text-[#D7CCC8] p-2 rounded-md focus:outline-none focus:bg-[#2C2C2C] w-full" />
+            <button onClick={() => fetchUsers()} className="bg-[#FFB74D] py-2 px-4 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">Search</button>
+          </div>
+          <div>
+            <div>
+              <h3 className="text-[#D7CCC8] font-bold">User List</h3>
+              <ul className="hidden md:block">
+                {users.map((user) => (
+                  <li key={user._id} className="border-b border-gray-700 py-2">
+                    {user.firstName} {user.lastName} - {user.email} ({user.role})
+                    <button onClick={() => handleEdit(user)} className="ml-4 text-[#FFB74D] hover:text-[#e68c32] cursor-pointer">Edit</button>
+                    <button onClick={() => handleDelete(user._id)} className="ml-2 text-red-500 hover:text-red-700 cursor-pointer">Delete</button>
+                  </li>
+                ))}
+              </ul>
+              <ul className="md:hidden block">
+                {users.map((user) => (
+                  <li key={user._id} className="border-b border-gray-700 py-2">
+                    <div>
+                      {user.firstName} {user.lastName} - {user.email} ({user.role})
+                    </div>
+                    <button onClick={() => handleEdit(user)} className="md:ml-4 text-[#FFB74D] hover:text-[#e68c32] cursor-pointer">Edit</button>
+                    <button onClick={() => handleDelete(user._id)} className="ml-2 text-red-500 hover:text-red-700 cursor-pointer">Delete</button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="flex justify-between items-center mt-4">
+            <button 
+              disabled={page === 1} 
+              onClick={() => setPage(page - 1)}
+              className="bg-[#FFB74D] py-2 px-4 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]"
+            >
+              Previous
+            </button>
+            <span className="text-[#D7CCC8] text-sm">
+              Page {page} of {totalPages}
+            </span>
+            <button
+              disabled={page === totalPages}
+              onClick={() => setPage(page + 1)}
+              className="bg-[#FFB74D] py-2 px-4 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]"
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
