@@ -20,9 +20,9 @@ export default function Header() {
 
         {/* <Link to="/admin">Admin</Link> */}
 
-        {user?.role === "admin" && <Link to="/admin">Admin</Link>}
+        {user?.role === "admin" && <Link to="/admin">ADMIN</Link>}
         
-        {user?.token ? <Link to="/profile">Profile</Link> : <Link to="/login" className="border border-[#FFB74D] text-[#FFB74D] py-2 px-4 rounded-4xl cursor-pointer hover:bg-[#FFB74D] hover:text-[#121212] duration-300 text-sm">LOGIN</Link> }
+        {user?.token ? <Link to="/profile">PROFILE</Link> : <Link to="/login" className="border border-[#FFB74D] text-[#FFB74D] py-2 px-4 rounded-4xl cursor-pointer hover:bg-[#FFB74D] hover:text-[#121212] duration-300 text-sm">LOGIN</Link> }
       </div>
     </nav>
   );

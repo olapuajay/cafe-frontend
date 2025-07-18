@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
+import logo from "../assets/logo.png";
 export default function Register() {
   const [user, setUser] = useState({});
   const [error, setError] = useState();
@@ -19,43 +20,52 @@ export default function Register() {
     }
   };
   return (
-    <div className="App-Register-Row">
-      <div style={{ backgroundColor: "white" }}>
-        <h2>Registration Form</h2>
-        {error}
-        <p>
+    <div className="p-4 text-[#D7CCC8] space-y-4">
+      <h2 className="text-center font-semibold text-2xl">Register</h2>
+      <div className="max-w-md mx-auto bg-[#3E2723] p-6 rounded-lg shadow-lg space-y-4">
+        <div>
+          <img src={logo} alt="Logo" className="mx-auto w-24 h-24 mb-4" />
+        </div>
+        <div className="space-y-4">
+          <p className="text-red-500 text-sm text-center">{error && error}</p>
+          <label htmlFor="firstName" className="text-sm">First Name</label>
           <input
             type="text"
+            name="firstName"
             onChange={(e) => setUser({ ...user, firstName: e.target.value })}
             placeholder="Enter First Name"
+            className="w-full mt-2 p-2 rounded-md bg-[#1E1E1E] border border-[#3E2723] text-[#D7CCC8] focus:outline-none focus:border-[#D7CCC8]"
           />
-        </p>
-        <p>
+          <label htmlFor="lastName" className="text-sm">Last Name</label>
           <input
             type="text"
+            name="lastName"
             placeholder="Enter Last Name"
             onChange={(e) => setUser({ ...user, lastName: e.target.value })}
+            className="w-full mt-2 p-2 rounded-md bg-[#1E1E1E] border border-[#3E2723] text-[#D7CCC8] focus:outline-none focus:border-[#D7CCC8]"
           />
-        </p>
-        <p>
+          <label htmlFor="email" className="text-sm">Email Address</label>
           <input
             type="text"
+            name="email"
             placeholder="Enter Email Address"
             onChange={(e) => setUser({ ...user, email: e.target.value })}
+            className="w-full mt-2 p-2 rounded-md bg-[#1E1E1E] border border-[#3E2723] text-[#D7CCC8] focus:outline-none focus:border-[#D7CCC8]"
           />
-        </p>
-        <p>
+          <label htmlFor="password" className="text-sm">Password</label>
           <input
             type="password"
             placeholder="Enter Password"
             onChange={(e) => setUser({ ...user, password: e.target.value })}
+            className="w-full mt-2 p-2 rounded-md bg-[#1E1E1E] border border-[#3E2723] text-[#D7CCC8] focus:outline-none focus:border-[#D7CCC8]"
           />
-        </p>
-        <p>
-          <button onClick={handleSubmit}>Submit</button>
-        </p>
-        <hr />
-      <Link to="/login">Already a member? Login Here...</Link>
+          <button onClick={handleSubmit} className="w-full bg-[#FFB74D] py-2 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">Submit</button>
+          <hr />
+          <div className="flex justify-center items-center gap-2 text-sm">
+            <p className="">Already a member?</p>
+            <Link to="/login" className=" text-blue-400 underline">Login</Link>
+          </div>
+        </div>
       </div>
     </div>
   );
