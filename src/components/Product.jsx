@@ -41,9 +41,9 @@ export default function Product() {
           {products &&
             products.map((product) => (
               <div key={product._id} className="md:p-4 p-2 flex flex-col rounded bg-[#3E2723] shadow-md">
-                <img src={product.imgUrl} className="md:h-42 h-24 w-full object-fill rounded"/>
-                <h3 className="text-[#D7CCC8] md:text-xl text-md capitalize font-bold mt-2">{product.productName}</h3>
-                <p className="text-[#D7CCC8]">{product.description}</p>
+                <img src={product.imgUrl} className="md:h-42 h-20 w-full object-fill rounded"/>
+                <h3 className="text-white md:text-xl text-sm capitalize font-bold mt-2">{product.productName}</h3>
+                <p className="text-[#D7CCC8] md:text-sm text-[10px]">{product.description}</p>
                 <h4 className="text-[#D7CCC8]">₹ {product.price}</h4>
                 <button onClick={() => addToCart(product)} className="bg-[#FFB74D] py-1 mt-2 md:text-lg text-sm rounded cursor-pointer hover:bg-[#e68c32] duration-300 text-[#121212] font-bold">Add to Cart</button>
               </div>

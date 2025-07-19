@@ -42,10 +42,10 @@ export default function Orders() {
     }
   };
   return (
-    <div>
-      <h2>Order Management</h2>
+    <div className="text-white flex flex-col gap-4 md:p-6 p-2">
+      <h2 className="text-[#D7CCC8] font-bold text-2xl">Order Management</h2>
       <div>
-        <select defaultValue="Pending" onChange={(e) => setStatus(e.target.value)}>
+        <select defaultValue="Pending" onChange={(e) => setStatus(e.target.value)} className="p-2 border rounded text-[#D7CCC8] bg-[#3E2723]">
           <option value="">All</option>
           <option value="Pending" >
             Pending
@@ -55,23 +55,25 @@ export default function Orders() {
         </select>
         {/* <button>Show</button> */}
       </div>
-      {orders &&
+      {orders && 
         orders.map((order, index) => (
-          <li key={index}>
-            {order._id}-{order.orderValue}-{order.status}-
-            {order.status === "Pending" && (
+          <div key={index} className="grid md:grid-cols-3 grid-cols-1 gap-4">
+            <div className="md:p-6 p-2 text-white flex flex-col gap-2 max-w-sm bg-[#3E2723] rounded-md">
+              <p><strong>ID: </strong>{order._id}</p>
+              <p><strong>Value: </strong>{order.orderValue}</p>
+              <p><strong>Status: </strong>{order.status}</p>
               <>
-                <button onClick={() => updateOrder("cancelled", order._id)}>
-                  Cancel
-                </button>
-                -
-                <button onClick={() => updateOrder("completed", order._id)}>
-                  Complete
-                </button>
+                {order.status === "Pending" && (
+                  <div className="flex gap-4">
+                    <button onClick={() => updateOrder("cancelled", order._id)} className="bg-[#FFB74D] py-1 px-2 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">Cancel</button>
+                    <button onClick={() => updateOrder("completed", order._id)} className="bg-[#FFB74D] py-1 px-2 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">Complete</button>
+                  </div>
+                )}
               </>
-            )}
-          </li>
-        ))}
+            </div>
+          </div>
+        ))
+      }
     </div>
   );
 }

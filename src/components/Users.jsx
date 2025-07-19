@@ -4,6 +4,8 @@ import { useRef } from "react";
 import { useContext } from "react";
 import { AppContext } from "../App";
 import axios from "axios";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
 export default function Users() {
   const [users, setUsers] = useState([]);
   const { user } = useContext(AppContext);
@@ -144,6 +146,7 @@ export default function Users() {
       {error}
       <div className="p-2 flex md:flex-row flex-col gap-8 rounded-lg shadow-lg">
         <form ref={frmRef} className="space-y-4 flex flex-col bg-[#3E2723] p-4 md:w-1/2 md:mx-auto rounded-lg shadow-lg">
+          <h1 className="text-[#D7CCC8] font-bold">Add User</h1>
           <input
             name="firstName"
             value={form.firstName}
@@ -209,7 +212,7 @@ export default function Users() {
         </form>
         <div className="flex flex-col md:w-1/2 mx-auto">
           <div className="flex gap-2 items-center mb-4 w-full">
-            <input type="text" onChange={(e) => setSearchVal(e.target.value)} className="bg-[#1E1E1E] text-[#D7CCC8] p-2 rounded-md focus:outline-none focus:bg-[#2C2C2C] w-full" />
+            <input type="text" placeholder="search for users..." onChange={(e) => setSearchVal(e.target.value)} className="bg-[#1E1E1E] text-[#D7CCC8] p-2 rounded-md focus:outline-none focus:bg-[#2C2C2C] w-full" />
             <button onClick={() => fetchUsers()} className="bg-[#FFB74D] py-2 px-4 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">Search</button>
           </div>
           <div>
@@ -237,13 +240,13 @@ export default function Users() {
               </ul>
             </div>
           </div>
-          <div className="flex justify-between items-center mt-4">
+          <div className="flex justify-between items-center mt-4 text-sm">
             <button 
               disabled={page === 1} 
               onClick={() => setPage(page - 1)}
-              className="bg-[#FFB74D] py-2 px-4 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]"
+              className="bg-[#FFB74D] p-1 rounded-full text-[#121212] cursor-pointer hover:bg-[#e68c32]"
             >
-              Previous
+              <ChevronLeft />
             </button>
             <span className="text-[#D7CCC8] text-sm">
               Page {page} of {totalPages}
@@ -251,9 +254,9 @@ export default function Users() {
             <button
               disabled={page === totalPages}
               onClick={() => setPage(page + 1)}
-              className="bg-[#FFB74D] py-2 px-4 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]"
+              className="bg-[#FFB74D] p-1 rounded-full text-[#121212] cursor-pointer hover:bg-[#e68c32]"
             >
-              Next
+              <ChevronRight />
             </button>
           </div>
         </div>
