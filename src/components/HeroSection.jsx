@@ -10,7 +10,7 @@ function HeroSection() {
     >
       <div className="text-start w-full md:w-2/3 lg:w-1/2">
         <h1 className="text-4xl md:text-5xl text-white font-bold mb-4">
-          DevBean
+          Dev<span className="text-[#8B6B5E]">Bean</span>
         </h1>
         <p className="md:text-lg text-md text-[#D7CCC8] mb-6">
           Every Bean, Every Bite, Made to Delight.
