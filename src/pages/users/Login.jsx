@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { AppContext } from "../App";
-import logo from "../assets/logo.png";
+import { AppContext } from "../../App";
+import logo from "../../assets/logo.png";
 export default function Login() {
   const {user, setUser} = useContext(AppContext);
   const [error, setError] = useState();

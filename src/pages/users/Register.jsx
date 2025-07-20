@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
-import logo from "../assets/logo.png";
+import logo from "../../assets/logo.png";
 export default function Register() {
   const [user, setUser] = useState({});
   const [error, setError] = useState();

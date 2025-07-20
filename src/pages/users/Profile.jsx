@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { AppContext } from "../App";
+import { AppContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 export default function Profile() {
   const [profile, setProfile] = useState({});

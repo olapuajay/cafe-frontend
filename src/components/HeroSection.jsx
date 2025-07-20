@@ -1,8 +1,9 @@
 import React from "react";
 import banner from "../assets/banner.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function HeroSection() {
+  const navigate = useNavigate();
   return (
     <div
       className="min-h-screen bg-cover bg-center flex items-center p-6"
@@ -21,11 +22,10 @@ function HeroSection() {
           experience the magic.
         </p>
         <div className="flex gap-4 mt-6">
-          <button className="bg-[#FFB74D] text-[#121212] py-2 px-4 rounded-4xl cursor-pointer hover:bg-[#e68c32] duration-300">
-            <Link to="/products"></Link>
+          <button onClick={() => navigate("/products")} className="bg-[#FFB74D] text-[#121212] py-2 px-4 rounded-4xl cursor-pointer hover:bg-[#e68c32] duration-300">
             Order Now
           </button>
-          <button className="bg-transparent border-2 border-[#FFB74D] text-[#FFB74D] py-2 px-4 rounded-4xl cursor-pointer hover:bg-[#FFB74D] hover:text-[#121212] duration-300">
+          <button onClick={() => navigate("/menu")} className="bg-transparent border-2 border-[#FFB74D] text-[#FFB74D] py-2 px-4 rounded-4xl cursor-pointer hover:bg-[#FFB74D] hover:text-[#121212] duration-300">
             Explore Menu
           </button>
         </div>
