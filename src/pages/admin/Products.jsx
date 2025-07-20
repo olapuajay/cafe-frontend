@@ -12,12 +12,15 @@ export default function Products() {
     description: "",
     price: "",
     imgUrl: "",
+    category: "",
   });
   const [page, setPage] = useState(1);
   const [searchVal, setSearchVal] = useState("");
   const [totalPages, setTotalPages] = useState(1);
   const [limit, setLimit] = useState(4);
   const [editId, setEditId] = useState();
+  const [selectedCategory, setSelectedcategory] = useState("all");
+
   const API_URL = import.meta.env.VITE_API_URL;
   const fetchProducts = async () => {
     try {
@@ -34,13 +37,13 @@ export default function Products() {
   };
   useEffect(() => {
     fetchProducts();
-  }, [page]);
+  }, [page, searchVal]);
   const handleDelete = async (id) => {
     try {
       const url = `${API_URL}/api/products/${id}`;
       const result = await axios.delete(url);
-      setError("User Deleted Successfully");
-      fetchUsers();
+      setError("Product Deleted Successfully");
+      fetchProducts();
     } catch (err) {
       console.log(err);
       setError("Something went wrong");
@@ -61,7 +64,7 @@ export default function Products() {
     try {
       const url = `${API_URL}/api/products`;
       const result = await axios.post(url, form);
-      setError("User added succesfully");
+      setError("Product added succesfully");
       fetchProducts();
       resetForm();
     } catch (err) {
@@ -78,6 +81,7 @@ export default function Products() {
       description: product.description,
       price: product.price,
       imgUrl: product.imgUrl,
+      category: product.category,
     });
   };
 
@@ -92,9 +96,9 @@ export default function Products() {
       const url = `${API_URL}/api/products/${editId}`;
       const result = await axios.patch(url, form);
       fetchProducts();
-      setEditId();
+      setEditId(null);
       resetForm();
-      setError("User information updated successfully");
+      setError("Product updated successfully");
     } catch (err) {
       console.log(err);
       setError("Something went wrong");
@@ -113,12 +117,16 @@ export default function Products() {
       description: "",
       price: "",
       imgUrl: "",
+      category: "",
     });
   };
+
+  const filteredProducts = selectedCategory === "all" ? products : products.filter((p) => p.category === selectedCategory);
+  
   return (
     <div className="flex flex-col text-white md:p-6 p-2">
       <h2 className="text-[#D7CCC8] font-bold text-2xl mb-4">Product Management</h2>
-      {error}
+      {error && <div className="mb-4 p-2 bg-[#3E2723] rounded">{error}</div>}
       <div className="flex justify-center my-4">
         <form ref={frmRef} className="md:w-md bg-[#3E2723] p-4 rounded-lg shadow-lg space-y-4">
           <h1 className="text-[#D7CCC8] font-bold">Add Product</h1>
@@ -149,6 +157,22 @@ export default function Products() {
             required
             className="bg-[#1E1E1E] text-[#D7CCC8] p-2 rounded-md focus:outline-none focus:bg-[#2C2C2C] w-full"
           />
+          <select
+            name="category"
+            value={form.category}
+            onChange={handleChange}
+            required
+            className="bg-[#1E1E1E] text-[#D7CCC8] p-2 rounded-md focus:outline-none focus:bg-[#2C2C2C] w-full"
+          >
+            <option value="">Select Category</option>
+            <option value="coffee">Coffee</option>
+            <option value="tea">Tea</option>
+            <option value="cold_brews">Cold Brews</option>
+            <option value="baked_items">Baked Items</option>
+            <option value="savory_bites">Savory Bites</option>
+            <option value="desserts">Desserts</option>
+            <option value="healthy_picks">Healthy Picks</option>
+          </select>
           <input
             name="imgUrl"
             value={form.imgUrl}
@@ -174,9 +198,20 @@ export default function Products() {
             <input type="text" placeholder="search for products..." onChange={(e) => setSearchVal(e.target.value)} className="bg-[#1E1E1E] text-[#D7CCC8] p-2 rounded-md focus:outline-none focus:bg-[#2C2C2C] w-full" />
             <button onClick={fetchProducts} className="bg-[#FFB74D] py-2 px-4 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">Search</button>
           </div>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {["all", "coffee", "tea", "cold_brews", "baked_items", "savory_bites", "desserts", "healthy_picks"].map((cat) => (
+              <button 
+                key={cat} 
+                onClick={() => setSelectedcategory(cat)}
+                className={`px-3 py-1 rounded-full border ${selectedCategory === cat ? 'bg-[#D7CCC8] text-black' : 'bg-transparent text-[#D7CCC8] border-[#D7CCC8]'}`}
+              >
+                {cat.replace("_", " ").toUpperCase()}
+              </button>
+            ))}
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-4 md:gap-4 gap-2 md:p-4">
             {
-              products.map((prod) => (
+              filteredProducts.map((prod) => (
                 <div key={prod._id} className="bg-[#3E2723] p-4 flex flex-col rounded shadow-md">
                   <img src={prod.imgUrl} alt="" className="h-42 w-full object-fill rounded" />
                   <h3 className="text-[#D7CCC8] text-xl capitalize font-bold mt-2">{prod.productName}</h3>
@@ -184,7 +219,7 @@ export default function Products() {
                   <h4 className="text-[#D7CCC8]">₹ {prod.price}</h4>
                   <div className="flex gap-4">
                     <button onClick={() => handleEdit(prod)} className="bg-[#FFB74D] py-1 px-2 mt-2 md:text-lg text-sm rounded cursor-pointer hover:bg-[#e68c32] duration-300 text-[#121212] font-bold">Edit</button>
-                    <button onClick={() => handleDelete(value._id)} className="bg-red-500 py-1 px-2 mt-2 md:text-lg text-sm rounded cursor-pointer hover:bg-red-700 duration-300 text-[#121212] font-bold">Delete</button>
+                    <button onClick={() => handleDelete(prod._id)} className="bg-red-500 py-1 px-2 mt-2 md:text-lg text-sm rounded cursor-pointer hover:bg-red-700 duration-300 text-[#121212] font-bold">Delete</button>
                   </div>
                 </div>
               ))
