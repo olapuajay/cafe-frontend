@@ -7,6 +7,7 @@ export default function Order() {
   const { user } = useContext(AppContext);
   const [error, setError] = useState();
   const [orders, setOrders] = useState([]);
+
   const fetchOrders = async () => {
     try {
       const url = `${API_URL}/api/orders/${user.email}`;
@@ -22,38 +23,82 @@ export default function Order() {
     fetchOrders();
   }, []);
 
+  const getStatusColor = (status) => {
+    switch(status) {
+      case 'Pending':
+        return 'bg-yellow-500';
+      case 'completed':
+        return 'bg-green-500';
+      case 'cancelled':
+        return 'bg-red-500';
+      default:
+        return 'bg-gray-500';
+    }
+  };
+
   return (
-    <div>
-      <h3>My Orders</h3>
-      {orders &&
-        orders.map((order, index) => (
-          <div key={index}>
-            <p>OrderId:{order._id}</p>
-            <p>Order Value: {order.orderValue} </p>
-            <p>Status:{order.status}</p>
-            <table border="1">
-              <thead>
-                <tr>
-                  <th>Product</th>
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              {order.items.map((item) => (
-                <tbody key={item._id}>
-                  <tr>
-                    <td>{item.productName}</td>
-                    <td>{item.price}</td>
-                    <td>{item.qty}</td>
-                    <td>{item.qty * item.price}</td>
-                  </tr>
-                </tbody>
-              ))}
-            </table>
-            <hr />
+    <div className="p-4 md:p-8 min-h-screen text-white">
+      <div className="max-w-6xl mx-auto">
+        <h3 className="text-xl font-bold text-[#D7CCC8] mb-8 border-b pb-2">My Orders</h3>
+        {error && (
+          <div className="bg-red-500 text-white p-3 rounded mb-6">{error}</div>
+        )}
+        {orders.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-xl text-gray-400">You haven't placed any orders yet</p>
           </div>
-        ))}
+        ) : (
+          <div className="space-y-8">
+            {orders.map((order, index) => (
+                <div key={index} className="bg-[#3E2723] rounded-lg overflow-hidden shadow-lg">
+                  <div className="p-4 md:p-6 border-b border-[#5D4037]">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                      <div className="mb-4 md:mb-0">
+                        <h4 className="text-lg font-semibold">Order #{order._id}</h4>
+                        <p className="text-sm text-[#D7CCC8]">Placed on {new Date(order.createdAt).toLocaleString()}</p>
+                      </div>
+                      <div className="flex items-center space-x-4">
+                        <div className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>{order.status}</div>
+                        <p className="text-xl font-bold">₹{order.orderValue}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-[#4E342E]">
+                        <tr>
+                          <th className="px-4 py-3 text-left">Product</th>
+                          <th className="px-4 py-3 text-right">Price</th>
+                          <th className="px-4 py-3 text-center">Quantity</th>
+                          <th className="px-4 py-3 text-right">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {order.items.map((item) => (
+                          <tr key={item._id} className="border-b border-[#5D4037] hover:bg-[#4E342E]">
+                            <td className="px-4 py-3">
+                              <div className="flex items-center">
+                                <div className="w-10 h-10 bg-[#5D4037] rounded mr-3 overflow-hidden">
+                                  {item.image && (
+                                    <img src={item.image} alt={item.productName} className="w-full h-full object-cover" />
+                                  )}
+                                </div>
+                                <span>{item.productName}</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-right">₹{item.price}</td>
+                            <td className="px-4 py-3 text-center">{item.qty}</td>
+                            <td className="px-4 py-3 text-right font-medium">₹{(item.qty * item.price)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

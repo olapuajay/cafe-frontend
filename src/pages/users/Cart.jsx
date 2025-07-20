@@ -60,7 +60,7 @@ export default function Cart() {
       {cart.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-xl text-gray-400">Your cart is empty</p>
-          <button className="mt-4 bg-[#3E2723] hover:bg-[#5D4037] text-white py-2 px-6 rounded">
+          <button onClick={() => Navigate("/")} className="mt-4 bg-[#3E2723] hover:bg-[#5D4037] text-white py-2 px-6 rounded">
             Continue Shopping
           </button>
         </div>
