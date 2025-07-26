@@ -1,35 +1,28 @@
-import React, { useState } from 'react'
-import espresso from '../assets/espresso.webp';
-import matcha_latte from '../assets/matcha_latte.jpg';
-import croissant from '../assets/croissant.jpg';
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function MenuSection() {
-  const [activeCategory, setActiveCategory] = useState('all');
+  const [menuItems, setMenuItems] = useState([]);
   const navigate = useNavigate();
-
-  const menuItems = [
-    { id: 1, name: 'Espresso', price: 180, category: 'coffee', subcategory: 'Coffee', description: 'Rich and concentrated coffee', image: espresso },
-    { id: 2, name: 'Matcha Latte', price: 240, category: 'tea', subcategory: 'Tea', description: 'Creamy matcha with steamed milk', image: matcha_latte },
-    { id: 3, name: 'Croissant', price: 160, category: 'baked_items', subcategory: 'Pastries', description: 'Buttery flaky pastry', image: croissant },
-  ];
-  const categories = [
-    { id: 'all', name: 'All Menu', emoji: '🍽️' },
-    { id: 'coffee', name: 'Coffee', emoji: '☕' },
-    { id: 'tea', name: 'Tea', emoji: '🍵' },
-    { id: 'baked_items', name: 'Baked Goods', emoji: '🍰' },
-    { id: 'savory_bites', name: 'Savory', emoji: '🥪' },
-    { id: 'desserts', name: 'Desserts', emoji: '🧁' },
-    { id: 'healthy_picks', name: 'Healthy', emoji: '🥗' }
-  ];
-
-  const filteredItems = activeCategory === 'all' ? menuItems : menuItems.filter(item => item.category === activeCategory);
+  const API = import.meta.env.VITE_API_URL;
+  const fetchFeatured = async () => {
+    try {
+      const res = await axios.get(`${API}/api/menu/featured`);
+      setMenuItems(res.data.result);
+    } catch (error) {
+      console.log("Error fetching featured products", error);
+    }
+  };
+  useEffect(() => {
+    fetchFeatured();
+  }, []);
 
   return (
     <section className='py-12 px-4 bg-[#3E2723]'>
       <div className='max-w-6xl mx-auto'>
         <h2 className='text-3xl font-bold mb-8 text-center text-[#D7CCC8]'>Our Menu</h2>
-        <div className='flex flex-wrap justify-center gap-3 mb-8'>
+        {/* <div className='flex flex-wrap justify-center gap-3 mb-8'>
           {categories.map((category) => (
             <button
               key={category.id}
@@ -40,12 +33,12 @@ function MenuSection() {
               {category.name}
             </button>
           ))}
-        </div>
+        </div> */}
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-          {filteredItems.map((item) => (
-            <div key={item.id} className='rounded-lg overflow-hidden shadow-md transition-all hover:scale-[1.02] duration-300 hover:shadow-lg bg-[#F5EBE0] border-1 border-[#E3D5CA]'>
+          {menuItems.map((item) => (
+            <div key={item._id} className='rounded-lg overflow-hidden shadow-md transition-all hover:scale-[1.02] duration-300 hover:shadow-lg bg-[#F5EBE0] border-1 border-[#E3D5CA]'>
               <div className='h-48 flex items-center justify-center bg-[#D6CCC2]'>
-                <img src={item.image} alt="" className='h-full w-full object-fill' />
+                <img src={item.imgUrl} alt="" className='h-full w-full object-fill' />
               </div>
               <div className='p-6'>
                 <div className='flex justify-center gap-2 items-center'>
@@ -64,7 +57,7 @@ function MenuSection() {
             </div>
           ))}
         </div>
-        {filteredItems.length === 0 && (
+        {menuItems.length === 0 && (
           <div className='text-center py-12'>
             <p className='text-xl text-[#8B6B5E]'>
               No items found in this category

@@ -7,6 +7,7 @@ export default function Admin() {
         <Link to="/admin">Users</Link>
         <Link to="/admin/products">Products</Link>
         <Link to="/admin/orders">Orders</Link>
+        <Link to="/admin/menu">Menu</Link>
       </div>
       <div>
         <Outlet />
