@@ -10,7 +10,8 @@ export default function Login() {
   const [error, setError] = useState();
   const Navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       const url = `${API_URL}/api/users/login`;
       const result = await axios.post(url, user);
@@ -28,10 +29,11 @@ export default function Login() {
         <div>
           <img src={logo} alt="Logo" className="mx-auto w-24 h-24 mb-4" />
         </div>
-        <div className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <p className="text-red-500 text-sm text-center">{error && error}</p>
           <label htmlFor="email" className="text-sm">Email Address</label>
           <input
+            id="email"
             type="text"
             name="email"
             placeholder="Enter Email"
@@ -40,19 +42,20 @@ export default function Login() {
           />
           <label htmlFor="password" className="text-sm">Password</label>
           <input
+            id="password"
             type="password"
             name="password"
             placeholder="Password"
             onChange={(e) => setUser({ ...user, password: e.target.value })}
             className="w-full mt-2 p-2 rounded-md bg-[#1E1E1E] border border-[#3E2723] text-[#D7CCC8] focus:outline-none focus:border-[#D7CCC8]"
           />
-          <button onClick={handleSubmit} className="w-full bg-[#FFB74D] py-2 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">LOGIN</button>
+          <button type="submit" className="w-full bg-[#FFB74D] py-2 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">LOGIN</button>
           <hr />
           <div className="flex justify-center items-center gap-2 text-sm">
             <p className="">Don't have an account?</p>
             <Link to="/register" className=" text-blue-400 underline">Register</Link>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

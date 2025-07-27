@@ -8,7 +8,8 @@ export default function Register() {
   const [error, setError] = useState();
   const Navigate = useNavigate()
   const API_URL = import.meta.env.VITE_API_URL
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       const url = `${API_URL}/api/users/register`;
       const result = await axios.post(url, user);
@@ -26,7 +27,7 @@ export default function Register() {
         <div>
           <img src={logo} alt="Logo" className="mx-auto w-24 h-24 mb-4" />
         </div>
-        <div className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <p className="text-red-500 text-sm text-center">{error && error}</p>
           <label htmlFor="firstName" className="text-sm">First Name</label>
           <input
@@ -59,52 +60,14 @@ export default function Register() {
             onChange={(e) => setUser({ ...user, password: e.target.value })}
             className="w-full mt-2 p-2 rounded-md bg-[#1E1E1E] border border-[#3E2723] text-[#D7CCC8] focus:outline-none focus:border-[#D7CCC8]"
           />
-          <button onClick={handleSubmit} className="w-full bg-[#FFB74D] py-2 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">Submit</button>
+          <button type="submit" className="w-full bg-[#FFB74D] py-2 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">Submit</button>
           <hr />
           <div className="flex justify-center items-center gap-2 text-sm">
             <p className="">Already a member?</p>
             <Link to="/login" className=" text-blue-400 underline">Login</Link>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
 }
-
-// export default function Register() {
-//   const firstName = useRef();
-//   const lastName = useRef();
-//   const email = useRef();
-//   const password = useRef();
-//   const handleSubmit = () => {
-//     const user = {
-//       firstName: firstName.current.value,
-//       lastName: lastName.current.value,
-//       email: email.current.value,
-//       password: password.current.value,
-//     };
-//     console.log(user);
-//   };
-//   return (
-//     <div className="App-Register-Row">
-//       <div style={{ backgroundColor: "white" }}>
-//         <h2>Registration Form</h2>
-//         <p>
-//           <input type="text" placeholder="Enter First Name" ref={firstName} />
-//         </p>
-//         <p>
-//           <input type="text" placeholder="Enter Last Name" ref={lastName} />
-//         </p>
-//         <p>
-//           <input type="text" placeholder="Enter Email Address" ref={email} />
-//         </p>
-//         <p>
-//           <input type="password" placeholder="Enter Password" ref={password} />
-//         </p>
-//         <p>
-//           <button onClick={handleSubmit}>Submit</button>
-//         </p>
-//       </div>
-//     </div>
-//   );
-// }
