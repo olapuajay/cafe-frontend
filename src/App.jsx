@@ -13,6 +13,7 @@ import Login from "./pages/users/Login";
 import Products from "./pages/admin/Products";
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 import Menu from "./pages/admin/Menu";
+import MenuPage from "./pages/users/Menu";
 export const AppContext = createContext();
 function App() {
   const [cart, setCart] = useState([]);
@@ -25,6 +26,7 @@ function App() {
           <Routes>
             <Route index element={<Home />} />
             <Route path="products" element={<Product />} />
+            <Route path="menu" element={<MenuPage />} />
             <Route path="login" element={<Login />} />
             <Route path="profile" element={<Profile />} />
             <Route path="register" element={<Register />} />

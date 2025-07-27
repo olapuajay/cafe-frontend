@@ -175,7 +175,7 @@ export default function Menu() {
             className="bg-[#1E1E1E] text-[#D7CCC8] p-2 rounded-md w-full"
           />
           <label className="text-[#D7CCC8]">
-            <input type="checkbox" name="featured" checked={form.featured} onChange={handleChange} />
+            <input type="checkbox" name="featured" checked={form.featured} onChange={handleChange} className="mr-1" />
             Featured
           </label>
           {editId ? (
@@ -218,6 +218,7 @@ export default function Menu() {
                 <h3 className="text-[#D7CCC8] text-xl capitalize font-bold mt-2">{menu.name}</h3>
                 <p className="text-[#D7CCC8]">{menu.description}</p>
                 <h4 className="text-[#D7CCC8]">₹ {menu.price}</h4>
+                {menu.featured && <p className="text-[#e68c32] font-semibold">⭐ Featured</p>}
                 <div className="flex gap-4">
                   <button onClick={() => handleEdit(menu)} className="bg-[#FFB74D] py-1 px-2 mt-2 text-sm rounded hover:bg-[#e68c32] text-[#121212] font-bold">Edit</button>
                   <button onClick={() => handleDelete(menu._id)} className="bg-red-500 py-1 px-2 mt-2 text-sm rounded hover:bg-red-700 text-[#121212] font-bold">Delete</button>

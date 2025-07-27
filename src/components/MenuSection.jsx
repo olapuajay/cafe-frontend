@@ -22,18 +22,6 @@ function MenuSection() {
     <section className='py-12 px-4 bg-[#3E2723]'>
       <div className='max-w-6xl mx-auto'>
         <h2 className='text-3xl font-bold mb-8 text-center text-[#D7CCC8]'>Our Menu</h2>
-        {/* <div className='flex flex-wrap justify-center gap-3 mb-8'>
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
-              className={`flex items-center px-4 py-2 rounded-full transition-all ${activeCategory === category.id ? 'bg-[#A37B67] text-white' : 'bg-[#D6CCC2] text-[#5A4D41] hover:bg-[#E3D5CA]'}`}
-            >
-              <span className='mr-2 text-lg'>{category.emoji}</span>
-              {category.name}
-            </button>
-          ))}
-        </div> */}
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
           {menuItems.map((item) => (
             <div key={item._id} className='rounded-lg overflow-hidden shadow-md transition-all hover:scale-[1.02] duration-300 hover:shadow-lg bg-[#F5EBE0] border-1 border-[#E3D5CA]'>
