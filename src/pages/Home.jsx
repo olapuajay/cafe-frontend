@@ -5,6 +5,7 @@ import BestSellersSection from '../components/BestSellersSection'
 import AboutSection from '../components/AboutSection'
 import VisitSection from '../components/VisitSection'
 import IgGallery from '../components/IgGallery'
+import Footer from '../components/Footer'
 
 function Home() {
   return (  
@@ -15,6 +16,7 @@ function Home() {
       <AboutSection />
       <VisitSection />
       <IgGallery />
+      <Footer />
     </div>
   )
 }

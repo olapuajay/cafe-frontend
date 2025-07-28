@@ -11,7 +11,7 @@ function IgGallery() {
     { id: 6, imgUrl: "https://placehold.co/600x600/1E1E1E/D7CCC8?text=Barista+Life", caption: 'Behind the scenes #BaristaLife', likes: "2.4k", link: "#" },
   ];
   return (
-    <section className='py-12 px-4 bg-[#3E2723]'>
+    <section id='gallery' className='py-12 px-4 bg-[#3E2723]'>
       <div className='max-w-6xl mx-auto'>
         <div className='text-center mb-12'>
           <h2 className='text-3xl font-bold mb-4 text-[#D7CCC8]'>

@@ -24,7 +24,7 @@ function BestSellersSection() {
   ];
 
   return (
-    <section className='py-16 px-4 bg-[#121212]'>
+    <section id='bestsellers' className='py-16 px-4 bg-[#121212]'>
       <div className='max-w-6xl mx-auto'>
         <div className='text-center mb-12'>
           <h2 className='text-3xl font-bold mb-4 text-[#D7CCC8]'>Customer Favourites</h2>

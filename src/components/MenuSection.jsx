@@ -19,7 +19,7 @@ function MenuSection() {
   }, []);
 
   return (
-    <section className='py-12 px-4 bg-[#3E2723]'>
+    <section id='menu' className='py-12 px-4 bg-[#3E2723]'>
       <div className='max-w-6xl mx-auto'>
         <h2 className='text-3xl font-bold mb-8 text-center text-[#D7CCC8]'>Our Menu</h2>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>

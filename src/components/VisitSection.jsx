@@ -3,7 +3,7 @@ import { MapPin } from 'lucide-react'
 
 function VisitSection() {
   return (
-    <section className='py-16 px-4 bg-[#121212]'>
+    <section id='contact' className='py-16 px-4 bg-[#121212]'>
       <div className='max-w-4xl mx-auto text-center'>
         <h2 className='text-3xl font-bold mb-4 text-[#D7CCC8]'>Visit Us</h2>
         <div className='mb-8 p-8 rounded-xl bg-[#3E2723] border-1 border-[#1E1E1E]'>
