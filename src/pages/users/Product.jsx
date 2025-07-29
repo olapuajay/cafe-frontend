@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../App";
 export default function Product() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -7,6 +8,7 @@ export default function Product() {
   const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
   const { user, cart, setCart } = useContext(AppContext);
+  const navigate = useNavigate();
   const fetchProducts = async () => {
     try {
       const url = `${API_URL}/api/products/all`;
@@ -30,6 +32,10 @@ export default function Product() {
       setCart([...cart, product]);
     }
   };
+
+  const handleCardClick = (productId) => {
+    navigate(`/products/${productId}`);
+  }
   return (
     <div className="p-4">
       {loading ? (
@@ -43,6 +49,7 @@ export default function Product() {
               <div
                 key={product._id}
                 className="md:p-4 p-2 flex flex-col rounded bg-[#3E2723] shadow-md"
+                onClick={() => handleCardClick(product._id)}
               >
                 <img
                   src={product.imgUrl}

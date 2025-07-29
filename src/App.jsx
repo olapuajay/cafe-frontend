@@ -1,6 +1,7 @@
 import { useState, createContext } from "react";
 import Register from "./pages/users/Register";
 import Product from "./pages/users/Product";
+import ProductDetails from "./pages/users/ProductDetails";
 import Cart from "./pages/users/Cart";
 import Order from "./pages/users/Order";
 import Admin from "./pages/admin/Admin";
@@ -26,6 +27,7 @@ function App() {
           <Routes>
             <Route index element={<Home />} />
             <Route path="products" element={<Product />} />
+            <Route path="products/:id" element={<ProductDetails />} />
             <Route path="menu" element={<MenuPage />} />
             <Route path="login" element={<Login />} />
             <Route path="profile" element={<Profile />} />

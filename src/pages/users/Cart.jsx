@@ -71,8 +71,8 @@ export default function Cart() {
               <div key={value._id} className="flex flex-col sm:flex-row justify-between item-center p-4 bg-[#3E2723] rounded-lg mb-4 transition-all">
                 <div className="flex items-center mb-3 sm:mb-0">
                   <div className="w-16 h-16 bg-[#5D4037] rounded mr-4 overflow-hidden">
-                    {value.image && (
-                      <img src={value.image} alt="" className="w-full h-full object-cover" />
+                    {value.imgUrl && (
+                      <img src={value.imgUrl} alt="" className="w-full h-full object-cover" />
                     )}
                   </div>
                   <div>
@@ -120,31 +120,12 @@ export default function Cart() {
             {user?.token ? (
               <button onClick={placeOrder} className="w-full bg-[#FFB74D] hover:bg-[#e68c32] text-[#3E2723] font-bold py-3 px-4 rounded transition-colors">Place Order</button>
             ) : (
-              <button onClick={() => Navigate("/login")}>Login to Order</button>
+              <button onClick={() => Navigate("/login")} className="w-full bg-[#FFB74D] hover:bg-[#e68c32] text-[#3E2723] font-bold py-3 px-4 rounded transition-colors">Login to Order</button>
             )}
           </div>
         </div>
 
       )}
-      {/* {cart && cart.map((value) => (
-        <div key={value._id} className="p-2 flex gap-4 items-center bg-[#3E2723] rounded mb-4">
-          <p>{value.productName}</p>
-          <p>{value.price}</p>
-          <button onClick={() => decrement(value._id, value.qty)}>-</button>
-          <p>{value.qty}</p>
-          <button onClick={() => increment(value._id, value.qty)}>+</button>
-          <p>{value.price * value.qty}</p>
-        </div>
-      ))}
-      <h4>Total Items: {cart.length}</h4> 
-      <h5>Order Value:{orderValue}</h5>
-      <p>
-        {user?.token ? (
-          <button onClick={placeOrder}>Place Order</button>
-        ) : (
-          <button onClick={() => Navigate("/login")}>Login to Order</button>
-        )}
-      </p> */}
     </div>
   );
 }
