@@ -31,6 +31,7 @@ export default function Register() {
           <p className="text-red-500 text-sm text-center">{error && error}</p>
           <label htmlFor="firstName" className="text-sm">First Name</label>
           <input
+            id="firstName"
             type="text"
             name="firstName"
             onChange={(e) => setUser({ ...user, firstName: e.target.value })}
@@ -39,6 +40,7 @@ export default function Register() {
           />
           <label htmlFor="lastName" className="text-sm">Last Name</label>
           <input
+            id="lastName"
             type="text"
             name="lastName"
             placeholder="Enter Last Name"
@@ -47,6 +49,7 @@ export default function Register() {
           />
           <label htmlFor="email" className="text-sm">Email Address</label>
           <input
+            id="email"
             type="text"
             name="email"
             placeholder="Enter Email Address"
@@ -55,12 +58,13 @@ export default function Register() {
           />
           <label htmlFor="password" className="text-sm">Password</label>
           <input
+            id="password"
             type="password"
             placeholder="Enter Password"
             onChange={(e) => setUser({ ...user, password: e.target.value })}
             className="w-full mt-2 p-2 rounded-md bg-[#1E1E1E] border border-[#3E2723] text-[#D7CCC8] focus:outline-none focus:border-[#D7CCC8]"
           />
-          <button type="submit" className="w-full bg-[#FFB74D] py-2 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">Submit</button>
+          <button type="submit" className="w-full bg-[#FFB74D] py-2 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">CREATE ACCOUNT</button>
           <hr />
           <div className="flex justify-center items-center gap-2 text-sm">
             <p className="">Already a member?</p>

@@ -1,27 +1,37 @@
-import React, { useContext } from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import { AppContext } from "../../App";
 import logo from "../../assets/logo.png";
+
 export default function Login() {
-  const {user, setUser} = useContext(AppContext);
+  const { setUser } = useContext(AppContext);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState();
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const url = `${API_URL}/api/users/login`;
-      const result = await axios.post(url, user);
-      setUser(result.data);
-      Navigate("/");
+      const result = await axios.post(url, { email, password });
+
+      console.log("Login response:", result.data);
+
+      localStorage.setItem("token", result.data.token);
+      const { token, ...userData } = result.data;
+      setUser({ ...userData, token });
+      localStorage.setItem("user", JSON.stringify({ ...userData, token }));
+
+      navigate("/");
     } catch (err) {
-      console.log(err);
-      setError("Something went wrong");
+      console.log(err.response?.data || err);
+      setError("Invalid email or password");
     }
   };
+
   return (
     <div className="p-4 text-[#D7CCC8] space-y-4">
       <h2 className="text-center font-semibold text-2xl">Login</h2>
@@ -35,25 +45,25 @@ export default function Login() {
           <input
             id="email"
             type="text"
-            name="email"
             placeholder="Enter Email"
-            onChange={(e) => setUser({ ...user, email: e.target.value })}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full mt-2 p-2 rounded-md bg-[#1E1E1E] border border-[#3E2723] text-[#D7CCC8] focus:outline-none focus:border-[#D7CCC8]"
           />
           <label htmlFor="password" className="text-sm">Password</label>
           <input
             id="password"
             type="password"
-            name="password"
             placeholder="Password"
-            onChange={(e) => setUser({ ...user, password: e.target.value })}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full mt-2 p-2 rounded-md bg-[#1E1E1E] border border-[#3E2723] text-[#D7CCC8] focus:outline-none focus:border-[#D7CCC8]"
           />
           <button type="submit" className="w-full bg-[#FFB74D] py-2 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">LOGIN</button>
           <hr />
           <div className="flex justify-center items-center gap-2 text-sm">
-            <p className="">Don't have an account?</p>
-            <Link to="/register" className=" text-blue-400 underline">Register</Link>
+            <p>Don't have an account?</p>
+            <Link to="/register" className="text-blue-400 underline">Register</Link>
           </div>
         </form>
       </div>

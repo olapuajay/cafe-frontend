@@ -18,7 +18,11 @@ import MenuPage from "./pages/users/Menu";
 export const AppContext = createContext();
 function App() {
   const [cart, setCart] = useState([]);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : {};
+  });
+
   return (
     <div className="App-Container">
       <AppContext.Provider value={{ cart, setCart, user, setUser }}>
