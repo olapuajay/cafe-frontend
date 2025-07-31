@@ -1,16 +1,24 @@
 import React, { useContext, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
 import { Menu, X } from "lucide-react";
 import logo from "../assets/logo.png"
 export default function Header() {
-  const { user } = useContext(AppContext);
+  const { user, setUser } = useContext(AppContext);
   const location = useLocation();
+  const navigate = useNavigate();
   const isHomePage = location.pathname === "/";
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  }
+
+  const logout = () => {
+    setUser({});
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
   }
 
   const navlinks = (
@@ -24,7 +32,16 @@ export default function Header() {
     
       {user?.role === "admin" && <Link to="/admin" onClick={toggleMenu}>ADMIN</Link>}
       
-      {user?.token ? <Link to="/profile" onClick={toggleMenu}>PROFILE</Link> : <Link to="/login" onClick={toggleMenu} className="border border-[#FFB74D] text-[#FFB74D] py-2 px-4 rounded-4xl cursor-pointer hover:bg-[#FFB74D] hover:text-[#121212] duration-300 text-sm">LOGIN</Link> }
+      {user?.token ? (
+        <>
+          <Link to="/profile" onClick={toggleMenu}>PROFILE</Link>
+          <button 
+            onClick={logout} 
+            className="border border-red-500 text-red-500 py-1 px-4 rounded-4xl hover:bg-red-500 hover:text-white duration-300 text-sm">
+            LOGOUT
+          </button>
+        </>
+      ) : <Link to="/login" onClick={toggleMenu} className="border border-[#FFB74D] text-[#FFB74D] py-2 px-4 rounded-4xl cursor-pointer hover:bg-[#FFB74D] hover:text-[#121212] duration-300 text-sm">LOGIN</Link> }
     </>
   )
 

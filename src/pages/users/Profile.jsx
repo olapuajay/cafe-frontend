@@ -12,10 +12,17 @@ export default function Profile() {
   const API_URL = import.meta.env.VITE_API_URL;
   const Navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
+  const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+  const userId = storedUser?.id;
+
   const fetchProfile = async () => {
     try {
-      const url = `${API_URL}/api/users/${user.id}/profile`;
-      const result = await axios.get(url);
+      const url = `${API_URL}/api/users/${userId}/profile`;
+      const result = await axios.get(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log(result.data);
       setProfile(result.data);
       setForm({
         firstName: result.data.firstName || '',
@@ -29,8 +36,8 @@ export default function Profile() {
     }
   };
   useEffect(() => {
-    if (!user?.id) {
-      Navigate("/");
+    if (!userId || !token) {
+      Navigate("/login");
     } else {
       fetchProfile();
     }
@@ -39,20 +46,25 @@ export default function Profile() {
 
   const logout = () => {
     setUser({});
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     Navigate("/");
   };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       const url = `${API_URL}/api/users/${profile._id}/profile`;
-      const result = await axios.patch(url, form);
+      const result = await axios.patch(url, form, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       fetchProfile();
       setMessage('Profile updated successfully');
       setTimeout(() => {
-        setMessage(null);
+        setMessage("");
       }, 2000);
     } catch (err) {
       console.log(err);
@@ -68,7 +80,9 @@ export default function Profile() {
             <h3 className="text-2xl font-bold text-[#D7CCC8]">My Profile</h3>
             <button onClick={logout} className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md transition duration-300">Logout</button>
           </div>
-          {}
+          {message && (
+            <p className="text-green-400 text-sm mb-4">{message}</p>
+          )}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div>
