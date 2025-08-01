@@ -10,6 +10,8 @@ export default function Cart() {
   const Navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
 
+  const token = localStorage.getItem("token");
+
   const increment = (id, qty) => {
     const updatedCart = cart.map((product) =>
       product._id === id ? { ...product, qty: qty + 1 } : product
@@ -41,12 +43,19 @@ export default function Cart() {
         orderValue,
         items: cart,
       };
-      const result = await axios.post(url, newOrder);
+      const result = await axios.post(url, newOrder, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setCart([])
       Navigate("/order");
     } catch (err) {
-      console.log(err);
-      setError("Something went wrong");
+      if (err.response?.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        Navigate("/login");
+      } else {
+        setError("Something went wrong");
+      }
     }
   };
 

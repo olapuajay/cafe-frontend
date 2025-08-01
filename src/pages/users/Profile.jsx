@@ -22,7 +22,7 @@ export default function Profile() {
       const result = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(result.data);
+      // console.log(result.data);
       setProfile(result.data);
       setForm({
         firstName: result.data.firstName || '',
