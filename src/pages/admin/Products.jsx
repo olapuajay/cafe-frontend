@@ -26,7 +26,9 @@ export default function Products() {
     try {
       setError("Loading...");
       const url = `${API_URL}/api/products/?page=${page}&limit=${limit}&search=${searchVal}`;
-      const result = await axios.get(url);
+      const result = await axios.get(url, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       setProducts(result.data.products);
       setTotalPages(result.data.total);
       setError();
@@ -41,7 +43,9 @@ export default function Products() {
   const handleDelete = async (id) => {
     try {
       const url = `${API_URL}/api/products/${id}`;
-      const result = await axios.delete(url);
+      const result = await axios.delete(url, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       setError("Product Deleted Successfully");
       fetchProducts();
     } catch (err) {
@@ -63,7 +67,9 @@ export default function Products() {
     }
     try {
       const url = `${API_URL}/api/products`;
-      const result = await axios.post(url, form);
+      const result = await axios.post(url, form, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       setError("Product added succesfully");
       fetchProducts();
       resetForm();
@@ -94,7 +100,9 @@ export default function Products() {
     }
     try {
       const url = `${API_URL}/api/products/${editId}`;
-      const result = await axios.patch(url, form);
+      const result = await axios.patch(url, form, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       fetchProducts();
       setEditId(null);
       resetForm();
@@ -125,7 +133,7 @@ export default function Products() {
   
   return (
     <div className="flex flex-col text-white md:p-6 p-2">
-      <h2 className="text-[#D7CCC8] font-bold text-2xl mb-4">Product Management</h2>
+      <h2 className="text-[#D7CCC8] font-bold text-2xl">Product Management</h2>
       {error && <div className="mb-4 p-2 bg-[#3E2723] rounded">{error}</div>}
       <div className="flex justify-center my-4">
         <form ref={frmRef} className="md:w-md bg-[#3E2723] p-4 rounded-lg shadow-lg space-y-4">

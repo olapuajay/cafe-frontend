@@ -33,7 +33,11 @@ export default function Orders() {
   const updateOrder = async (status, id) => {
     try {
       const url = `${API_URL}/api/orders/${id}`;
-      const result = await axios.patch(url, { status });
+      const result = await axios.patch(url, { status }, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
       fetchOrders();
     } catch (err) {
       console.log(err);

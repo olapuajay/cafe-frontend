@@ -58,10 +58,14 @@ export default function Menu() {
     }
     try {
       if (editId) {
-        await axios.patch(`${API}/api/menu/${editId}`, form);
+        await axios.patch(`${API}/api/menu/${editId}`, form, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
         setError("Menu item updated successfully");
       } else {
-        await axios.post(`${API}/api/menu`, form);
+        await axios.post(`${API}/api/menu`, form, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
         setError("Menu item added successfully");
       }
       resetForm();
@@ -92,7 +96,9 @@ export default function Menu() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${API}/api/menu/${id}`);
+      await axios.delete(`${API}/api/menu/${id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       setError("Menu item deleted successfully");
       fetchMenus();
     } catch (err) {
@@ -108,7 +114,7 @@ export default function Menu() {
 
   return (
     <div className="flex flex-col text-white md:p-6 p-2">
-      <h2 className="text-[#D7CCC8] font-bold text-2xl mb-4">Menu Management</h2>
+      <h2 className="text-[#D7CCC8] font-bold text-2xl">Menu Management</h2>
       {error && <div className="mb-4 p-2 bg-[#3E2723] rounded">{error}</div>}
       <div className="flex justify-center my-4">
         <form ref={frmRef} className="md:w-md bg-[#3E2723] p-4 rounded-lg shadow-lg space-y-4">

@@ -26,8 +26,8 @@ export default function Header() {
       <Link to="/" onClick={toggleMenu} className="hover:text-[#FFB74D] duration-300">HOME</Link>
       <Link to="/products" onClick={toggleMenu} className="hover:text-[#FFB74D] duration-300">SHOP</Link>
       <Link to="/menu" onClick={toggleMenu} className="hover:text-[#FFB74D] duration-300">MENU</Link>
-      <Link to="/cart" onClick={toggleMenu} className="hover:text-[#FFB74D] duration-300">CART</Link>
-      <Link to="/order" onClick={toggleMenu} className="hover:text-[#FFB74D] duration-300">ORDERS</Link>
+      {user?.role === "user" && <Link to="/cart" onClick={toggleMenu} className="hover:text-[#FFB74D] duration-300">CART</Link>}
+      {user?.role === "user" && <Link to="/order" onClick={toggleMenu} className="hover:text-[#FFB74D] duration-300">ORDERS</Link>}
     
       {/* <Link to="/admin" onClick={toggleMenu}>Admin</Link> */}
     
