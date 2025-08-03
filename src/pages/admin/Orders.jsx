@@ -58,45 +58,79 @@ export default function Orders() {
           <option value="completed">Completed</option>
           <option value="cancelled">Cancelled</option>
         </select>
-        {/* <button>Show</button> */}
       </div>
-      {orders &&
-        orders.map((order, index) => (
-          <div key={index} className="grid md:grid-cols-3 grid-cols-1 gap-4">
-            <div className="md:p-6 p-2 text-white flex flex-col gap-2 max-w-sm bg-[#3E2723] rounded-md">
-              <p>
-                <strong>ID: </strong>
-                {order._id}
-              </p>
-              <p>
-                <strong>Value: </strong>
-                {order.orderValue}
-              </p>
-              <p>
-                <strong>Status: </strong>
-                {order.status}
-              </p>
-              <>
-                {order.status === "Pending" && (
-                  <div className="flex gap-4">
-                    <button
-                      onClick={() => updateOrder("cancelled", order._id)}
-                      className="bg-[#FFB74D] py-1 px-2 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={() => updateOrder("completed", order._id)}
-                      className="bg-[#FFB74D] py-1 px-2 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]"
-                    >
-                      Complete
-                    </button>
-                  </div>
-                )}
-              </>
-            </div>
+      {orders.length === 0 && <p>No orders found.</p>}
+      {orders.map((order) => (
+        <div
+          key={order._id}
+          className="grid md:grid-cols-2 grid-cols-1 gap-4 p-4 bg-[#3E2723] rounded-md"
+        >
+          <div>
+            <p><strong>Order ID:</strong> {order._id}</p>
+            <p><strong>Total Value:</strong> ₹{order.orderValue}</p>
+            <p><strong>Status:</strong> {order.status}</p>
+            <p><strong>User:</strong> {order.email}</p>
+
+            {order.status === "Pending" && (
+              <div className="flex gap-4 mt-2">
+                <button
+                  onClick={() => updateOrder("cancelled", order._id)}
+                  className="bg-[#FFB74D] py-1 px-2 rounded-md text-[#121212] hover:bg-[#e68c32]"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => updateOrder("completed", order._id)}
+                  className="bg-[#FFB74D] py-1 px-2 rounded-md text-[#121212] hover:bg-[#e68c32]"
+                >
+                  Complete
+                </button>
+              </div>
+            )}
           </div>
-        ))}
+
+          <div className="flex flex-col gap-2">
+            <strong>Products:</strong>
+            {order.items?.map((item, idx) => (
+              <div key={idx} className="border p-2 rounded bg-[#4E342E] flex md:flex-row flex-col">
+                <div className="md:w-30 h-30 w-full bg-[#5D4037] rounded mr-3 overflow-hidden">
+                  {item.imgUrl && (
+                    <img
+                      src={item.imgUrl}
+                      alt={item.productName}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
+                </div>
+                <div>
+                  <p><strong>Name:</strong> {item.productName}</p>
+                  <p><strong>Description:</strong> {item.description}</p>
+                  <p><strong>Category:</strong> {item.category}</p>
+                  <p><strong>Price:</strong> ₹{item.price}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <div className="flex gap-4 mt-4">
+        <button
+          disabled={page === 1}
+          onClick={() => setPage((p) => p - 1)}
+          className="bg-[#FFB74D] px-3 py-1 rounded disabled:opacity-50"
+        >
+          Prev
+        </button>
+        <span>Page {page} of {totalPages}</span>
+        <button
+          disabled={page === totalPages}
+          onClick={() => setPage((p) => p + 1)}
+          className="bg-[#FFB74D] px-3 py-1 rounded disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }

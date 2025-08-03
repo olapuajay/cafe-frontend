@@ -173,9 +173,7 @@ export default function Products() {
             className="bg-[#1E1E1E] text-[#D7CCC8] p-2 rounded-md focus:outline-none focus:bg-[#2C2C2C] w-full"
           >
             <option value="">Select Category</option>
-            <option value="coffee">Coffee</option>
-            <option value="tea">Tea</option>
-            <option value="cold_brews">Cold Brews</option>
+            <option value="packed_goods">Packed Items</option>
             <option value="baked_items">Baked Items</option>
             <option value="savory_bites">Savory Bites</option>
             <option value="desserts">Desserts</option>
@@ -207,7 +205,7 @@ export default function Products() {
             <button onClick={fetchProducts} className="bg-[#FFB74D] py-2 px-4 rounded-md text-[#121212] cursor-pointer hover:bg-[#e68c32]">Search</button>
           </div>
           <div className="flex flex-wrap gap-2 mb-4">
-            {["all", "coffee", "tea", "cold_brews", "baked_items", "savory_bites", "desserts", "healthy_picks"].map((cat) => (
+            {["all", "packed_goods", "baked_items", "savory_bites", "desserts", "healthy_picks"].map((cat) => (
               <button 
                 key={cat} 
                 onClick={() => setSelectedcategory(cat)}
