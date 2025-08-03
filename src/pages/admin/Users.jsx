@@ -25,20 +25,28 @@ export default function Users() {
   const [limit, setLimit] = useState(2);
   const [editId, setEditId] = useState();
   const API_URL = import.meta.env.VITE_API_URL;
+
+  const token = localStorage.getItem("token");
+
   const fetchUsers = async () => {
     try {
       const url = `${API_URL}/api/users/?page=${page}&limit=${limit}&search=${searchVal}`;
       const result = await axios.get(url, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-      setUsers(result.data.users);
-      setTotalPages(result.data.total);
+      setUsers(result.data.users || []);
+      setTotalPages(result.data.total || 1);
       setError();
     } catch (err) {
-      console.log(err);
-      setError("Something went wrong");
+      if (err.response && err.response.status === 401) {
+        setError("Session expired. Please log in again.");
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      } else {
+        setError("Something went wrong");
+      }
     } finally {
       setLoading(false);
     }
@@ -51,7 +59,7 @@ export default function Users() {
       const url = `${API_URL}/api/users/${id}`;
       const result = await axios.delete(url, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       setError("User Deleted Successfully");
@@ -77,7 +85,7 @@ export default function Users() {
       const url = `${API_URL}/api/users`;
       const result = await axios.post(url, form, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       setError("User added succesfully");
@@ -112,7 +120,7 @@ export default function Users() {
       const url = `${API_URL}/api/users/${editId}`;
       const result = await axios.patch(url, form, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       fetchUsers();
@@ -247,10 +255,9 @@ export default function Users() {
             <div>
               <h3 className="text-[#D7CCC8] font-bold">User List</h3>
               <ul className="hidden md:block">
-                {users.map((user) => (
+                {Array.isArray(users) && users.length > 0 ? (users.map((user) => (
                   <li key={user._id} className="border-b border-gray-700 py-2">
-                    {user.firstName} {user.lastName} - {user.email} ({user.role}
-                    )
+                    {user.firstName} {user.lastName} - {user.email} ({user.role})
                     <button
                       onClick={() => handleEdit(user)}
                       className="ml-4 text-[#FFB74D] hover:text-[#e68c32] cursor-pointer"
@@ -264,7 +271,9 @@ export default function Users() {
                       Delete
                     </button>
                   </li>
-                ))}
+                ))) : (
+                  <li className="text-gray-400 py-2">No users found</li>
+                )}
               </ul>
               <ul className="md:hidden block">
                 {users.map((user) => (

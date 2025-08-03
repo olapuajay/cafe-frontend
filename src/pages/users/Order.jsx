@@ -44,6 +44,21 @@ export default function Order() {
     }
   };
 
+  const cancelOrder = async (orderId) => {
+    try {
+      const url = `${API_URL}/api/orders/${orderId}/cancel`;
+      const result = await axios.patch(
+        url,
+        { status: "cancelled" },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      fetchOrders();
+    } catch (error) {
+      console.log(error.response?.data || error);
+      setError(error.response?.data?.message || "Failed to cancel the order. Please try again.");
+    }
+  };
+
   useEffect(() => {
     if (!userId || !token) {
       Navigate("/login");
@@ -52,18 +67,28 @@ export default function Order() {
     }
   }, [user, token]);
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "Pending":
-        return "bg-yellow-500";
-      case "completed":
-        return "bg-green-500";
-      case "cancelled":
-        return "bg-red-500";
-      default:
-        return "bg-gray-500";
-    }
-  };
+  const statusSteps = ["Pending", "completed", "cancelled"];
+  const renderStatusTracker = (currentStatus) => {
+    const currentIndex = statusSteps.indexOf(currentStatus);
+    const progressValue = currentStatus === "cancelled" ? 100 : ((currentIndex + 1) / (statusSteps.length - 1)) * 100;
+    const progressColor = currentStatus === "cancelled" ? "bg-red-500" : "bg-green-500";
+
+    return (
+      <div className="flex flex-col mt-4 w-full max-w-md mx-auto">
+        <div className="flex justify-between mb-2 text-sm text-[#D7CCC8]">
+          {statusSteps.map((step, index) => (
+            <span key={index}>{step}</span>
+          ))}
+        </div>
+        <div className="w-full h-3 bg-gray-700 rounded-lg overflow-hidden">
+          <div className={`h-full ${progressColor} transition-all duration-500`} style={{ width: `${progressValue}%` }}></div>
+        </div>
+        <p className={`mt-2 text-center text-sm ${currentStatus === "cancelled" ? "text-red-400" : "text-green-400"}`}>
+          {currentStatus === "cancelled" ? 'Order Cancelled' : `Current Status: ${currentStatus}`}
+        </p>
+      </div>
+    )
+  }
 
   return (
     <div className="p-4 md:p-8 min-h-screen text-white">
@@ -97,17 +122,19 @@ export default function Order() {
                         Placed on {new Date(order.createdAt).toLocaleString()}
                       </p>
                     </div>
-                    <div className="flex items-center space-x-4">
-                      <div
-                        className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
-                          order.status
-                        )}`}
-                      >
-                        {order.status}
-                      </div>
+                    <div className="flex gap-4 items-center">
                       <p className="text-xl font-bold">₹{order.orderValue}</p>
+                      {order.status === "Pending" && (
+                        <button
+                          onClick={() => cancelOrder(order._id)}
+                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                        >
+                          Cancel Order
+                        </button>
+                      )}
                     </div>
                   </div>
+                  {renderStatusTracker(order.status)}
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full">

@@ -6,22 +6,19 @@ import { useFetcher } from "react-router-dom";
 export default function Orders() {
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState();
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(3);
-  const [totalPages, setTotalPages] = useState(1);
   const [status, setStatus] = useState("Pending");
   const { user } = useContext(AppContext);
   const API_URL = import.meta.env.VITE_API_URL;
+
   const fetchOrders = async () => {
     try {
-      const url = `${API_URL}/api/orders/?page=${page}&limit=${limit}&status=${status}`;
+      const url = `${API_URL}/api/orders/?status=${status}`;
       const result = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       });
-      setOrders(result.data.orders);
-      setTotalPages(result.data.total);
+      setOrders(result.data.orders || []);
     } catch (err) {
       console.log(err);
       setError("Something went wrong");
@@ -113,24 +110,6 @@ export default function Orders() {
           </div>
         </div>
       ))}
-
-      <div className="flex gap-4 mt-4">
-        <button
-          disabled={page === 1}
-          onClick={() => setPage((p) => p - 1)}
-          className="bg-[#FFB74D] px-3 py-1 rounded disabled:opacity-50"
-        >
-          Prev
-        </button>
-        <span>Page {page} of {totalPages}</span>
-        <button
-          disabled={page === totalPages}
-          onClick={() => setPage((p) => p + 1)}
-          className="bg-[#FFB74D] px-3 py-1 rounded disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
     </div>
   );
 }
