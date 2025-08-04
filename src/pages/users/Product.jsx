@@ -38,9 +38,13 @@ export default function Product() {
 
   const addToCart = (product) => {
     const found = cart.find((item) => item._id === product._id);
-    if (!found) {
-      product.qty = 1;
-      setCart([...cart, product]);
+    if (found) {
+      const updatedCart = cart.map((item) => (
+        item._id === product._id ? { ...item, qty: item.qty + 1 } : item
+      ));
+      setCart(updatedCart);
+    } else {
+      setCart([...cart, { ...product, qty: 1 }]);
     }
   };
 
@@ -71,11 +75,12 @@ export default function Product() {
           {filteredItems.map((product) => (
               <div
                 key={product._id}
-                className="md:p-4 p-2 flex flex-col rounded bg-[#3E2723] shadow-md"
+                className="md:p-4 p-2 flex flex-col rounded bg-[#3E2723] shadow-md cursor-pointer"
                 onClick={() => handleCardClick(product._id)}
               >
                 <img
                   src={product.imgUrl}
+                  alt={product.productName}
                   className="md:h-42 h-20 w-full object-fill rounded"
                 />
                 <h3 className="text-white md:text-xl text-sm capitalize font-bold mt-2">
@@ -86,10 +91,10 @@ export default function Product() {
                 </p>
                 <h4 className="text-[#D7CCC8]">₹ {product.price}</h4>
                 <button
-                  onClick={() => addToCart(product)}
+                  onClick={(e) => {e.stopPropagation(); addToCart(product)}}
                   className="bg-[#FFB74D] py-1 mt-2 md:text-lg text-sm rounded cursor-pointer hover:bg-[#e68c32] duration-300 text-[#121212] font-bold"
                 >
-                  Add to Cart
+                  {cart.find((item) => item._id === product._id) ? `Added (${cart.find((item) => item._id === product._id).qty})` : 'Add to Cart'}
                 </button>
               </div>
             ))}

@@ -69,30 +69,30 @@ function ProductDetails() {
       </button>
 
       {/* Product Section */}
-      <div className="flex flex-col lg:flex-row gap-10 bg-[#1E1E1E] p-6 rounded-xl shadow-lg">
+      <div className="flex flex-col lg:flex-row gap-4 md:gap-10 p-4 md:p-6 rounded-xl shadow-lg bg-[#1E1E1E]">
         {/* Product Image */}
-        <div className="flex-1 flex justify-center items-center">
+        <div className="flex justify-center items-center">
           <img
             src={product.imgUrl}
             alt={product.productName}
-            className="w-80 h-80 md:w-96 md:h-96 object-contain rounded-xl bg-[#2C2C2C] p-4"
+            className="w-80 h-full md:w-96 md:h-96 object-contain rounded-lg"
           />
         </div>
 
         {/* Product Info */}
-        <div className="flex-1 space-y-5">
-          <h2 className="text-2xl md:text-4xl font-extrabold uppercase tracking-wide">
+        <div className="flex-1 space-y-2 flex flex-col justify-center">
+          <h2 className="text-xl md:text-3xl font-extrabold uppercase tracking-wide">
             {product.productName}
           </h2>
           <p className="text-[#D7CCC8] text-base leading-relaxed">{product.description}</p>
-          <p className="text-3xl font-bold text-[#FFB74D]">${product.price}</p>
-          <p className="text-lg text-[#D7CCC8] bg-[#2C2C2C] px-3 py-1 rounded w-fit">
+          <p className="text-xl md:text-2xl font-bold text-[#FFB74D]">${product.price}</p>
+          <span className="text-md md:text-lg text-[#D7CCC8] bg-[#2C2C2C] px-2 py-1 rounded w-fit">
             {product.category}
-          </p>
+          </span>
 
           <button
             onClick={() => addToCart(product)}
-            className="bg-[#FFB74D] px-5 py-2 mt-4 text-lg rounded cursor-pointer hover:bg-[#e68c32] transition duration-300 text-[#121212] font-bold shadow-md"
+            className="bg-[#FFB74D] px-2 py-1 md:px-4 md:py-2 mt-4 md:mt-6 text-lg rounded cursor-pointer hover:bg-[#e68c32] transition duration-300 text-[#121212] font-bold shadow-md md:w-fit w-full"
           >
             Add to Cart
           </button>
