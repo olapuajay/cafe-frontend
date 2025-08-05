@@ -11,6 +11,7 @@ function ProductDetails() {
   const { cart, setCart } = useContext(AppContext);
 
   const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,6 +19,10 @@ function ProductDetails() {
       try {
         const res = await axios.get(`${API}/api/products/${id}`);
         setProduct(res.data);
+
+        const relatedRes = await axios.get(`${API}/api/products/category?category=${res.data.category}`);
+        const filteredProducts = relatedRes.data.filter((p) => p._id !== id);
+        setRelatedProducts(filteredProducts);
       } catch (error) {
         console.log("Failed to fetch products ", error);
       } finally {
@@ -59,8 +64,7 @@ function ProductDetails() {
   }
 
   return (
-    <div className="bg-[#121212] text-white min-h-screen p-6 md:p-10">
-      {/* Back Button */}
+    <div className="bg-[#121212] text-white min-h-screen p-4 md:p-10">
       <button
         className="text-[#121212] mb-6 px-4 py-2 bg-[#FFB74D] rounded flex items-center gap-2 cursor-pointer hover:bg-[#e68c32] duration-300 shadow-md"
         onClick={() => navigate(-1)}
@@ -68,9 +72,7 @@ function ProductDetails() {
         <ArrowLeft size={18} /> Back
       </button>
 
-      {/* Product Section */}
       <div className="flex flex-col lg:flex-row gap-4 md:gap-10 p-4 md:p-6 rounded-xl shadow-lg bg-[#1E1E1E]">
-        {/* Product Image */}
         <div className="flex justify-center items-center">
           <img
             src={product.imgUrl}
@@ -79,13 +81,12 @@ function ProductDetails() {
           />
         </div>
 
-        {/* Product Info */}
         <div className="flex-1 space-y-2 flex flex-col justify-center">
           <h2 className="text-xl md:text-3xl font-extrabold uppercase tracking-wide">
             {product.productName}
           </h2>
           <p className="text-[#D7CCC8] text-base leading-relaxed">{product.description}</p>
-          <p className="text-xl md:text-2xl font-bold text-[#FFB74D]">${product.price}</p>
+          <p className="text-xl md:text-2xl font-bold text-[#FFB74D]">₹ {product.price}</p>
           <span className="text-md md:text-lg text-[#D7CCC8] bg-[#2C2C2C] px-2 py-1 rounded w-fit">
             {product.category}
           </span>
@@ -98,6 +99,28 @@ function ProductDetails() {
           </button>
         </div>
       </div>
+      {relatedProducts.length > 0 && (
+        <div className='mt-10'>
+          <h3 className='text-2xl font-bold mb-4'>Related Products</h3>
+          <div className='flex gap-4 overflow-x-auto scrollbar-hide p-2'>
+            {relatedProducts.map((item) => (
+              <div
+                key={item._id}
+                onClick={() => navigate(`/products/${item._id}`)}
+                className='min-w-[200px] bg-[#121212] p-4 rounded-lg shadow-md cursor-pointer hover:scale-105 transition'
+              >
+                <img
+                  src={item.imgUrl}
+                  alt={item.productName}
+                  className="w-full h-40 object-contain rounded-lg"
+                />
+                <p className="mt-2 text-lg font-semibold">{item.productName}</p>
+                <p className="text-[#FFB74D] font-bold">₹ {item.price}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
