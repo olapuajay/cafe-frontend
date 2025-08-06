@@ -26,6 +26,11 @@ export default function Cart() {
     setCart(updatedCart);
   };
 
+  const deleteItem = (id) => {
+    const updatedCart = cart.filter((product) => product._id !== id);
+    setCart(updatedCart);
+  };
+
   useEffect(() => {
     setOrderValue(
       cart.reduce((sum, value) => {
@@ -69,7 +74,7 @@ export default function Cart() {
       {cart.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-xl text-gray-400">Your cart is empty</p>
-          <button onClick={() => Navigate("/")} className="mt-4 bg-[#3E2723] hover:bg-[#5D4037] text-white py-2 px-6 rounded">
+          <button onClick={() => Navigate("/products")} className="mt-4 bg-[#3E2723] hover:bg-[#5D4037] text-white py-2 px-6 rounded">
             Continue Shopping
           </button>
         </div>
@@ -105,6 +110,13 @@ export default function Cart() {
                   <div className="text-right mr-4 sm:mr-8">
                     <p className="font-bold text-[#D7CCC8]">₹{(value.price * value.qty)}</p>
                   </div>
+                  <button
+                    onClick={() => deleteItem(value._id)}
+                    className="ml-4 text-red-400 hover:text-red-600 font-bold"
+                    title="Remove item"
+                  >
+                    ✕
+                  </button>
                 </div>
               </div>
             ))}
