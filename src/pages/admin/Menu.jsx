@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 export default function Menu() {
   const [menus, setMenus] = useState([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({
     name: "",
     category: "",
@@ -27,7 +28,6 @@ export default function Menu() {
 
   const fetchMenus = async () => {
     try {
-      setError("Loading...");
       const res = await axios.get(
         `${API}/api/menu?page=${page}&limit=${limit}&search=${searchVal}`
       );
@@ -37,6 +37,8 @@ export default function Menu() {
     } catch (error) {
       console.log(error);
       setError("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -111,6 +113,14 @@ export default function Menu() {
     selectedCategory === "all"
       ? menus
       : menus.filter((m) => m.category === selectedCategory);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-[#121212]">
+        <div className="w-12 h-12 border-4 border-[#FFB74D] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col text-white md:p-6 p-2">
@@ -217,17 +227,17 @@ export default function Menu() {
               </button>
             ))}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 md:gap-4 gap-2 md:p-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 md:gap-4 gap-2 md:p-4">
             {filteredMenus.map((menu) => (
-              <div key={menu._id} className="bg-[#3E2723] p-4 flex flex-col rounded shadow-md">
-                <img src={menu.imgUrl} alt={menu.name} className="h-42 w-full object-cover rounded" />
-                <h3 className="text-[#D7CCC8] text-xl capitalize font-bold mt-2">{menu.name}</h3>
-                <p className="text-[#D7CCC8]">{menu.description}</p>
+              <div key={menu._id} className="bg-[#3E2723] p-2 md:p-4 flex flex-col rounded shadow-md">
+                <img src={menu.imgUrl} alt={menu.name} className="md:h-42 h-20 w-full object-cover rounded" />
+                <h3 className="text-[#D7CCC8] md:text-xl text-sm capitalize font-bold mt-2">{menu.name}</h3>
+                <p className="text-[#D7CCC8] md:text-sm text-xs">{menu.description}</p>
                 <h4 className="text-[#D7CCC8]">₹ {menu.price}</h4>
-                {menu.featured && <p className="text-[#e68c32] font-semibold">⭐ Featured</p>}
+                {menu.featured && <p className="text-[#e68c32] font-semibold md:text-md text-sm">⭐ Featured</p>}
                 <div className="flex gap-4">
-                  <button onClick={() => handleEdit(menu)} className="bg-[#FFB74D] py-1 px-2 mt-2 text-sm rounded hover:bg-[#e68c32] text-[#121212] font-bold">Edit</button>
-                  <button onClick={() => handleDelete(menu._id)} className="bg-red-500 py-1 px-2 mt-2 text-sm rounded hover:bg-red-700 text-[#121212] font-bold">Delete</button>
+                  <button onClick={() => handleEdit(menu)} className="bg-[#FFB74D] py-1 px-2 mt-2 md:text-sm text-xs rounded hover:bg-[#e68c32] text-[#121212] font-bold">Edit</button>
+                  <button onClick={() => handleDelete(menu._id)} className="bg-red-500 py-1 px-2 mt-2 md:text-sm text-xs rounded hover:bg-red-700 text-[#121212] font-bold">Delete</button>
                 </div>
               </div>
             ))}

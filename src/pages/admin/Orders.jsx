@@ -6,6 +6,7 @@ import { useFetcher } from "react-router-dom";
 export default function Orders() {
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState();
+  const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState("Pending");
   const { user } = useContext(AppContext);
   const API_URL = import.meta.env.VITE_API_URL;
@@ -22,6 +23,8 @@ export default function Orders() {
     } catch (err) {
       console.log(err);
       setError("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -41,14 +44,27 @@ export default function Orders() {
       setError("Something went wrong");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-[#121212]">
+        <div className="w-12 h-12 border-4 border-[#FFB74D] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="text-white flex flex-col gap-4 md:p-6 p-2">
       <h2 className="text-[#D7CCC8] font-bold text-2xl">Order Management</h2>
-      <div>
+      <div className="mb-4">
+        <label htmlFor="status-filter" className="block mb-1 text-sm font-medium text-[#D7CCC8]">
+          Filter by Status
+        </label>
         <select
+          id="status-filter"
           defaultValue="Pending"
           onChange={(e) => setStatus(e.target.value)}
-          className="p-2 border rounded text-[#D7CCC8] bg-[#3E2723]"
+          className="w-full p-2 rounded-md bg-[#3E2723] text-[#D7CCC8] border border-[#5D4037] focus:outline-none focus:ring-2 focus:ring-[#FFB74D] focus:border-[#FFB74D] transition duration-300"
         >
           <option value="">All</option>
           <option value="Pending">Pending</option>
@@ -56,8 +72,9 @@ export default function Orders() {
           <option value="cancelled">Cancelled</option>
         </select>
       </div>
+
       {orders.length === 0 && <p>No orders found.</p>}
-      {orders.map((order) => (
+      {[...orders].reverse().map((order) => (
         <div
           key={order._id}
           className="grid md:grid-cols-2 grid-cols-1 gap-4 p-4 bg-[#3E2723] rounded-md"

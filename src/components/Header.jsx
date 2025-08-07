@@ -33,9 +33,9 @@ export default function Header() {
     
       {user?.role === "admin" && <Link to="/admin" onClick={toggleMenu}>ADMIN</Link>}
       
+      {user.role === "user" && <Link to="/profile" onClick={toggleMenu}>PROFILE</Link>}
       {user?.token ? (
         <>
-          <Link to="/profile" onClick={toggleMenu}>PROFILE</Link>
           <button 
             onClick={logout} 
             className="border border-red-500 text-red-500 py-1 px-4 rounded-4xl hover:bg-red-500 hover:text-white duration-300 text-sm">
@@ -61,7 +61,7 @@ export default function Header() {
       </button>
 
       {isOpen && (
-        <div className="md:hidden absolute top-16 left-0 w-full bg-[#121212] text-[#D7CCC8] flex flex-col items-center gap-6 py-8 shadow-lg z-40">
+        <div className="md:hidden absolute top-16 left-0 w-full h-screen bg-[#121212] text-[#D7CCC8] flex flex-col items-center gap-6 py-8 z-40">
           {navlinks}
         </div>
       )}

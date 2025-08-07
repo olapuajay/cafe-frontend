@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState();
+  const [loading, setLoading] = useState(true);
   const frmRef = useRef();
   const [form, setForm] = useState({
     productName: "",
@@ -24,7 +25,6 @@ export default function Products() {
   const API_URL = import.meta.env.VITE_API_URL;
   const fetchProducts = async () => {
     try {
-      setError("Loading...");
       const url = `${API_URL}/api/products/?page=${page}&limit=${limit}&search=${searchVal}`;
       const result = await axios.get(url, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -35,6 +35,8 @@ export default function Products() {
     } catch (err) {
       console.log(err);
       setError("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -131,6 +133,14 @@ export default function Products() {
 
   const filteredProducts = selectedCategory === "all" ? products : products.filter((p) => p.category === selectedCategory);
   
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-[#121212]">
+        <div className="w-12 h-12 border-4 border-[#FFB74D] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col text-white md:p-6 p-2">
       <h2 className="text-[#D7CCC8] font-bold text-2xl">Product Management</h2>
@@ -215,13 +225,13 @@ export default function Products() {
               </button>
             ))}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 md:gap-4 gap-2 md:p-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 md:gap-4 gap-2 md:p-4">
             {
               filteredProducts.map((prod) => (
-                <div key={prod._id} className="bg-[#3E2723] p-4 flex flex-col rounded shadow-md">
-                  <img src={prod.imgUrl} alt="" className="h-42 w-full object-fill rounded" />
-                  <h3 className="text-[#D7CCC8] text-xl capitalize font-bold mt-2">{prod.productName}</h3>
-                  <p className="text-[#D7CCC8]">{prod.description}</p>
+                <div key={prod._id} className="bg-[#3E2723] md:p-4 p-2 flex flex-col rounded shadow-md">
+                  <img src={prod.imgUrl} alt="" className="md:h-42 h-20 w-full object-fill rounded" />
+                  <h3 className="text-[#D7CCC8] md:text-xl text-sm capitalize font-bold mt-2">{prod.productName}</h3>
+                  <p className="text-[#D7CCC8] md:text-sm text-xs">{prod.description}</p>
                   <h4 className="text-[#D7CCC8]">₹ {prod.price}</h4>
                   <div className="flex gap-4">
                     <button onClick={() => handleEdit(prod)} className="bg-[#FFB74D] py-1 px-2 mt-2 md:text-lg text-sm rounded cursor-pointer hover:bg-[#e68c32] duration-300 text-[#121212] font-bold">Edit</button>

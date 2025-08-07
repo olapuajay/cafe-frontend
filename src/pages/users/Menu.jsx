@@ -33,6 +33,14 @@ function Menu() {
     fetchMenu();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-[#121212]">
+        <div className="w-12 h-12 border-4 border-[#FFB74D] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <div className='p-4'>
       <h2 className="text-[#D7CCC8] font-bold text-2xl">Menu</h2>
@@ -51,9 +59,6 @@ function Menu() {
             </button>
           ))}
         </div>
-      {loading ? (
-        <div className="text-center border-3 border-white h-12 w-12 rounded-full border-r-transparent border-t-transparent animate-spin p-4"></div>
-      ) : (
         <div className='grid grid-cols-2 md:grid-cols-4 md:gap-4 gap-2 md:p-4 justify-center items-center'>
           {filteredItems.map((menu) => (
             <div key={menu._id} className='rounded-lg overflow-hidden shadow-md transition-all hover:scale-[1.02] duration-300 hover:shadow-lg bg-[#F5EBE0] border-1 border-[#E3D5CA] relative'>
@@ -87,7 +92,6 @@ function Menu() {
             </div>
           )}
         </div>
-      )}
     </div>
   )
 }

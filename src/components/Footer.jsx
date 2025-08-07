@@ -5,7 +5,7 @@ function Footer() {
   return (
     <footer className='w-full py-12 px-4 bg-[#121212]'>
       <div className='max-w-6xl mx-auto'>
-        <div className='grid grid-cols-1 md:grid-cols-4 gap-8 mb-8'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8'>
           <div>
             <h3 className='text-lg md:text-xl font-bold mb-4 text-[#FFB74D]'>Quick Links</h3>
             <ul className='space-y-2'>

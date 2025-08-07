@@ -51,6 +51,14 @@ export default function Product() {
   const handleCardClick = (productId) => {
     navigate(`/products/${productId}`);
   }
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-[#121212]">
+        <div className="w-12 h-12 border-4 border-[#FFB74D] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-4">
       {error && (
@@ -68,9 +76,6 @@ export default function Product() {
           </button>
         ))}
       </div>
-      {loading ? (
-        <div className="text-center border-3 border-white h-12 w-12 rounded-full border-r-transparent border-t-transparent animate-spin"></div>
-      ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 md:gap-4 gap-2 md:p-4">
           {filteredItems.map((product) => (
               <div
@@ -104,7 +109,6 @@ export default function Product() {
               </div>
             )}
         </div>
-      )}
     </div>
   );
 }

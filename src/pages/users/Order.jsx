@@ -7,6 +7,7 @@ export default function Order() {
   const API_URL = import.meta.env.VITE_API_URL;
   const { user } = useContext(AppContext);
   const [error, setError] = useState();
+  const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState([]);
 
   const Navigate = useNavigate();
@@ -41,6 +42,8 @@ export default function Order() {
       }
 
       setOrders([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -90,6 +93,14 @@ export default function Order() {
     )
   }
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-[#121212]">
+        <div className="w-12 h-12 border-4 border-[#FFB74D] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 md:p-8 min-h-screen text-white">
       <div className="max-w-6xl mx-auto">
@@ -107,7 +118,7 @@ export default function Order() {
           </div>
         ) : (
           <div className="space-y-8">
-            {orders.map((order, index) => (
+            {[...orders].reverse().map((order, index) => (
               <div
                 key={index}
                 className="bg-[#3E2723] rounded-lg overflow-hidden shadow-lg"

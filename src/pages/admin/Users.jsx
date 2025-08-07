@@ -22,7 +22,7 @@ export default function Users() {
   const [page, setPage] = useState(1);
   const [searchVal, setSearchVal] = useState("");
   const [totalPages, setTotalPages] = useState(1);
-  const [limit, setLimit] = useState(2);
+  const [limit, setLimit] = useState(6);
   const [editId, setEditId] = useState();
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -148,6 +148,15 @@ export default function Users() {
       role: "",
     });
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-[#121212]">
+        <div className="w-12 h-12 border-4 border-[#FFB74D] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col md:p-6 p-2 text-white">
       <h2 className="text-[#D7CCC8] font-bold text-2xl">User Management</h2>
@@ -205,13 +214,6 @@ export default function Users() {
             <option value="user">User</option>
             <option value="admin">Admin</option>
           </select>
-          {/* <input
-            name="role"
-            value={form.role}
-            type="text"
-            onChange={handleChange}
-            placeholder="Role"
-          /> */}
           {editId ? (
             <>
               <button

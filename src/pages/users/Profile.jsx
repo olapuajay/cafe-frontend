@@ -9,6 +9,8 @@ export default function Profile() {
     firstName: '', lastName: '', email: '', password: ''
   });
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(true);
+
   const API_URL = import.meta.env.VITE_API_URL;
   const Navigate = useNavigate();
 
@@ -33,6 +35,8 @@ export default function Profile() {
     } catch (err) {
       console.log(err);
       setMessage('Something went wrong');
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -71,6 +75,14 @@ export default function Profile() {
       setMessage(err.response?.data?.message || "Something went wrong");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-[#121212]">
+        <div className="w-12 h-12 border-4 border-[#FFB74D] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen text-[#D7CCC8] py-12 px-4 sm:px-6 lg:px-8">
